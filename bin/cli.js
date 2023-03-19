@@ -5,9 +5,9 @@ const argv = yargs(hideBin(process.argv)).argv;
 const Dalai = require("../index")
 const Web = require("./web/index")
 let cmd = argv._[0]
+let home = process.cwd()
 if (argv._.length > 0) {
   let args = argv._.slice(1)
-  let home = argv.home
   let fresh = argv.fresh
   if (cmd === "serve") {
     const port = (args.length > 0 ? args[0] : 3000)
