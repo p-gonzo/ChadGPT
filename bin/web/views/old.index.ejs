@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>ChadGPT</title>
+<title>Dalai LLaMA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   body, pre { margin: 0; padding: 0px; color: rgba(0,0,0,0.8); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -48,7 +48,7 @@
     padding: 5px;
   }
   .form-header {
-    /* display: flex; */
+    display: flex;
     align-items: center;
     flex-wrap: wrap;
     margin: 0;
@@ -66,7 +66,6 @@
     width: 100px;
   }
   .logo {
-    text-align: center;
     font-weight: bold;
     text-decoration: none;
     color: black;
@@ -75,6 +74,7 @@
     letter-spacing: -1px;
     font-weight: bold;
     font-family: georgia;
+
   }
   .config-container {
     display: flex;
@@ -97,16 +97,16 @@
 <body>
 <form id="form" action="">
   <div class='form-header'></div>
-  <pre class='loading hidden'></pre>
-  <ul id="messages"></ul>
   <div class='input-container'>
     <div class='input-field'>
       <div contenteditable id='input'></div>
-      <button>Cha(d)t</button>
+      <button>Autocomplete</button>
     </div>
     <div class='info'>TIP: shift+enter for multiple lines</div>
   </div>
 </form>
+<pre class='loading hidden'></pre>
+<ul id="messages"></ul>
 <script src="/socket.io.min.js"></script>
 <script>
 const config = {
@@ -121,9 +121,6 @@ const config = {
   debug: false,
   models: []
 }
-let currentBuffer = '';
-let totalBuffer = `ChadGPT: Hi there! I'm your virtual assistant, ChadGPT. I provide informative and helpful responses. What can I do for you?\n`;
-
 const socket = io();
 const form = document.getElementById('form');
 const input = document.querySelector('#input');
@@ -151,15 +148,13 @@ const renderHeader = (config) => {
   const models = config.models.map((model, i) => {
     return `<option value="${model}" ${i === 0 ? "selected" : ""}>${model}</option>`
   }).join("")
-  return `<a class='logo' href="/">ChadGPT</a><div class='stretch'></div>
-
-  <div class='config-container'>
-  ${fields}
-  <div class='kv'>
-  <label>model</label>
-  <select id="model" name="model">${models}</select>
-  </div>
-
+  return `<a class='logo' href="/">Dalai</a><div class='stretch'></div>
+<div class='config-container'>
+${fields}
+<div class='kv'>
+<label>model</label>
+<select id="model" name="model">${models}</select>
+</div>
 </div>`
 }
 const loading = (on) => {
@@ -185,7 +180,7 @@ form.addEventListener('submit', (e) => {
   e.stopPropagation()
   if (input.textContent) {
     //config.prompt = input.textContent.replaceAll("\n", "\\n");
-    config.prompt = totalBuffer + 'User: ' +  input.textContent + '\nChadGPT:'
+    config.prompt = input.textContent
     config.id = "TS-" + Date.now() + "-" + Math.floor(Math.random() * 100000)
     socket.emit('request', config)
     config.id = null
@@ -217,14 +212,14 @@ const say = (msg, id) => {
   let item = document.createElement('li');
   if (id) item.setAttribute("data-id", id)
   item.textContent = msg;
-  messages.append(item);
+  messages.prepend(item);
 }
 socket.emit('request', {
   method: "installed"
 })
 socket.on('result', async ({ request, response }) => {
   loading(false)
-  // console.log(response)
+  console.log(response)
   if (request.method === "installed") {
     if (response == "\n\n<end>") {
       document.querySelector(".form-header").innerHTML = renderHeader(config)
@@ -233,13 +228,7 @@ socket.on('result', async ({ request, response }) => {
     }
   } else {
     if (response == "\n\n<end>") {
-      totalBuffer = currentBuffer + '\n';
-      totalBuffer = totalBuffer.replaceAll("\r\n", "\n");
-      totalBuffer = totalBuffer.replaceAll("\n\n", "\n");
-      currentBuffer = '';
-      console.log(totalBuffer);
     } else {
-      currentBuffer += response;
       const id = request.id
       let existing = document.querySelector(`[data-id='${id}']`)
       if (existing) {
