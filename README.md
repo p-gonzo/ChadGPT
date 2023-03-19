@@ -27,6 +27,13 @@ npm install
 - Stop model if it attempts to respond for the user
 - Fine tune the invisible prompts
 
+
+## Its hallucinations are hilarious
+(and there are a lot of them)
+![ChadGPT Example](./docs/example.png)
+
+
+
 ## Disclaimer
 
 The Alpaca model is uncensored and may contain bais and misinformation. Use at your own risk.
