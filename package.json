@@ -13,7 +13,8 @@
     "start": "./dalai serve",
     "just:run": "wrap () { yarn && yarn dalai:llama $1 && yarn start; }; wrap",
     "just:fix": "npx prettier --write .",
-    "postinstall": "node setup"
+    "postinstall": "node setup",
+    "build-react": "webpack"
   },
   "dependencies": {
     "@cdktf/node-pty-prebuilt-multiarch": "^0.10.1-pre.10",
@@ -22,6 +23,8 @@
     "express": "^4.18.2",
     "isomorphic-git": "^1.22.0",
     "nodejs-file-downloader": "^4.10.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "semver": "^7.3.8",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
@@ -30,7 +33,11 @@
     "yargs": "^17.7.1"
   },
   "devDependencies": {
-    "prettier": "^2.8.4"
+    "@babel/preset-react": "^7.18.6",
+    "babel-loader": "^9.1.2",
+    "prettier": "^2.8.4",
+    "webpack": "^5.76.2",
+    "webpack-cli": "^5.0.1"
   },
   "bin": {
     "dalai": "bin/cli.js"
