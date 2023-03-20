@@ -13,7 +13,6 @@ const { io } = require("socket.io-client");
 const term = require( 'terminal-kit' ).terminal;
 const Downloader = require("nodejs-file-downloader");
 const semver = require('semver');
-//const _7z = require('7zip-min');
 const axios = require('axios')
 const platform = os.platform()
 const shell = platform === 'win32' ? 'powershell.exe' : 'bash';

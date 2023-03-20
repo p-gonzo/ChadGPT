@@ -20,12 +20,16 @@ npm install
 ./chad serve
 ```
 
-## Todos
+## In Progress
 
 - Rebuild frontend in React
+
+## Todos
+
 - Parse out responses for a cleaner chat interface
 - Stop model if it attempts to respond for the user
 - Fine tune the invisible prompts
+- Fine tune model depending on specific use cases
 
 
 ## Its hallucinations are hilarious

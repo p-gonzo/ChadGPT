@@ -14,10 +14,15 @@
     "just:run": "wrap () { yarn && yarn dalai:llama $1 && yarn start; }; wrap",
     "just:fix": "npx prettier --write .",
     "postinstall": "node setup",
-    "build-react": "webpack"
+    "build:fe": "webpack",
+    "develop:fe": "webpack --watch",
+    "develop:be": "nodemon ./bin/cli.js serve"
   },
   "dependencies": {
     "@cdktf/node-pty-prebuilt-multiarch": "^0.10.1-pre.10",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.13",
     "axios": "^1.3.4",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
@@ -35,6 +40,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
     "babel-loader": "^9.1.2",
+    "nodemon": "^2.0.21",
     "prettier": "^2.8.4",
     "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1"
