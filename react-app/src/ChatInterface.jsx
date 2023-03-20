@@ -9,23 +9,11 @@ const ChatInterface = ( { config } ) => {
   const [chatHistory, setChatHistory] = useState([]);
   const [streamingResponse, setStreamingResponse] = useState('');
 
-  // const socket = socketIOClient(ENDPOINT);
-  // socket.on('result', ({request, response}) => {
-  //   // setChatHistory([...chatHistory, response.token]);
-  //   setStreamingResponse(streamingResponse + response.token);
-  //   console.log(streamingResponse)
-  //   console.log(chatHistory)
-  //   // console.log(request, response);
-  // });
-
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on('result', ({request, response}) => {
       // setChatHistory([...chatHistory, response.token]);
       setStreamingResponse(prevStreamingResponse => prevStreamingResponse + response.token);
-      console.log(streamingResponse)
-      console.log(chatHistory)
-      // console.log(request, response);
     });
   }, []);
 
