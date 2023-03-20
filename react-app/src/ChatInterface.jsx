@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 import { Container, Typography, TextField, Button } from '@mui/material';
+import { textAlign } from '@mui/system';
 
 const ENDPOINT = 'http://localhost:3000';
 
@@ -22,7 +23,9 @@ const ChatInterface = ( { config } ) => {
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on('result', ({request, response}) => {
-      if (response.token) setStreamingResponse(prevStreamingResponse => prevStreamingResponse + response.token);
+      if (response.token) {
+        setStreamingResponse(prevStreamingResponse => prevStreamingResponse + response.token);
+      } 
       if (response.token === null) {
         let currentlyStreamedResponse = '';
         setStreamingResponse(prevStreamingResponse => {
@@ -55,9 +58,12 @@ const ChatInterface = ( { config } ) => {
   return (
     <Container maxWidth="sm">
       <div style={chatHistoryStyle}>
-        {chatHistory.map((chatMessage, index) => (
-          <Typography key={index} variant="body1">{chatMessage}</Typography>
-        ))}
+        {chatHistory.map((chatMessage, index) => {
+          let chatStyle;
+          if (index % 2 === 0) { chatStyle = { backgroundColor: '#f0f0f0', textAlign: 'right'}; }
+          else { chatStyle = { }; }
+          return <Typography key={index} style={chatStyle} variant="body1">{chatMessage}</Typography>
+        })}
         <Typography key='stream' variant="body1">{streamingResponse}</Typography>
         <div ref={messagesEndRef} />
       </div>

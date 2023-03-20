@@ -168,11 +168,14 @@ class Dalai {
       let started = req.debug
       let ended = false
       let writeEnd = !req.skip_end
+      let totalmsgsLength = 0;
+      const promptLength = req.prompt.split('').length;
       await this.exec(`${main_bin_path} ${chunks.join(" ")}`, this.cores[Core].home, (msg) => {
         if (endpattern.test(msg)) ended = true
         if (started && !ended) {
           console.log(msg)
-          cb({token: msg })
+          totalmsgsLength += msg.split('').length;
+          if (totalmsgsLength > promptLength) cb({token: msg })
         } else if (ended && writeEnd) {
           cb({token: null})
           writeEnd = false
