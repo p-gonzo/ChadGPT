@@ -17,16 +17,26 @@ Uses invisible prompt engineering to coerce the predictive LLM into an "informat
 ```
 npm install
 ./chad alpaca install 7B
-./chad serve
 ```
+
+## Running Locally
+
+```
+npm run develop:be
+npm run develop:fe
+```
+
+## Updated UI
+
+![Updated UI](./docs/new-ui.png)
 
 ## In Progress
 
-- Rebuild frontend in React
+- Add confiiguration to remember chat history
+- Rebuild invisible prompts
 
 ## Todos
 
-- Parse out responses for a cleaner chat interface
 - Stop model if it attempts to respond for the user
 - Fine tune the invisible prompts
 - Fine tune model depending on specific use cases
