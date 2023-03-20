@@ -171,9 +171,10 @@ class Dalai {
       await this.exec(`${main_bin_path} ${chunks.join(" ")}`, this.cores[Core].home, (msg) => {
         if (endpattern.test(msg)) ended = true
         if (started && !ended) {
-          cb(msg)
+          console.log(msg)
+          cb({token: msg })
         } else if (ended && writeEnd) {
-          cb('\n\n<end>')
+          cb({token: null})
           writeEnd = false
         }
         if (startpattern.test(msg)) started = true
@@ -337,22 +338,24 @@ class Dalai {
 
 
   }
-  serve(port, options) {
-    const httpServer = createServer();
-    const io = new Server(httpServer)
-    io.on("connection", (socket) => {
-      socket.on('request', async (req) => {
-        await this.query(req, (str) => {
-          io.emit("result", { response: str, request: req })
-        })
-      });
-    });
-    httpServer.listen(port)
-  }
+  // serve(port, options) {
+  //   const httpServer = createServer();
+  //   const io = new Server(httpServer)
+  //   io.on("connection", (socket) => {
+  //     socket.on('request', async (req) => {
+  //       console.log('a')
+  //       await this.query(req, (str) => {
+  //         io.emit("result", { response: str, request: req })
+  //       })
+  //     });
+  //   });
+  //   httpServer.listen(port)
+  // }
   http(httpServer) {
     const io = new Server(httpServer)
     io.on("connection", (socket) => {
       socket.on('request', async (req) => {
+        console.log('b')
         await this.query(req, (str) => {
           io.emit("result", { response: str, request: req })
         })

@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
+import { Divider } from '@mui/material';
 
 import ChatInterface from './ChatInterface'
 import ConfigEditor from './ConfigEditor'
 import Footer from './Footer'
 import Header from './Header'
 
-function App() {
+const App = () => {
+  
+  const [chatConfig, setChatConfig] = useState({
+    seed: -1,
+    threads: 4,
+    n_predict: 200,
+    top_k: 40,
+    top_p: 0.9,
+    temp: 0.1,
+    repeat_last_n: 64,
+    repeat_penalty: 1.3,
+    debug: false,
+    models: []
+  });
+
   return (
     <div>
       <Header />
-      <ConfigEditor />
-      <ChatInterface />
+      <ConfigEditor config={chatConfig} setConfig={setChatConfig} />
+      <br />
+      <Divider />
+      <ChatInterface config={chatConfig} />
       <Footer />
     </div>
   );

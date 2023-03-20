@@ -1,22 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { TextField, Checkbox, FormControlLabel, Select, MenuItem } from '@mui/material';
 import socketIOClient from 'socket.io-client';
 
 const ENDPOINT = 'http://localhost:3000';
 
-const ConfigEditor = () => {
-  const [config, setConfig] = useState({
-    seed: -1,
-    threads: 4,
-    n_predict: 200,
-    top_k: 40,
-    top_p: 0.9,
-    temp: 0.1,
-    repeat_last_n: 64,
-    repeat_penalty: 1.3,
-    debug: false,
-    models: []
-  });
+const ConfigEditor = ( { config, setConfig } ) => {
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
@@ -26,6 +14,7 @@ const ConfigEditor = () => {
       else {
         setConfig(prevConfig => ({ ...prevConfig, 'models': response.models }));
       }
+      socket.disconnect();
     });
   }, []);
 

@@ -1,50 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
+import { Container, Typography, TextField, Button } from '@mui/material';
 
 const ENDPOINT = 'http://localhost:3000';
 
-function ChatInterface() {
+const ChatInterface = ( { config } ) => {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
+  const [streamingResponse, setStreamingResponse] = useState('');
+
+  // const socket = socketIOClient(ENDPOINT);
+  // socket.on('result', ({request, response}) => {
+  //   // setChatHistory([...chatHistory, response.token]);
+  //   setStreamingResponse(streamingResponse + response.token);
+  //   console.log(streamingResponse)
+  //   console.log(chatHistory)
+  //   // console.log(request, response);
+  // });
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
-    socket.on('chat message', (newMessage) => {
-      setChatHistory([...chatHistory, newMessage]);
+    socket.on('result', ({request, response}) => {
+      // setChatHistory([...chatHistory, response.token]);
+      setStreamingResponse(prevStreamingResponse => prevStreamingResponse + response.token);
+      console.log(streamingResponse)
+      console.log(chatHistory)
+      // console.log(request, response);
     });
-    return () => {
-      socket.disconnect();
-    };
-  }, [chatHistory]);
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (message) {
       const socket = socketIOClient(ENDPOINT);
-      socket.emit('chat message', message);
+      const id = "TS-" + Date.now() + "-" + Math.floor(Math.random() * 100000);
+      const model = config.models[0]; // Fix me
+      const payload = { ...config, id, model, 'prompt': message  };
+      // console.log(payload);
+      socket.emit('request', payload );
+      setChatHistory(prevChatHistory => [...prevChatHistory, message]);
       setMessage('');
-      socket.disconnect();
     }
   };
 
   return (
-    <div>
-      <h1>Chat Interface</h1>
+    <Container maxWidth="sm">
       <div>
         {chatHistory.map((chatMessage, index) => (
-          <p key={index}>{chatMessage}</p>
+          <Typography key={index} variant="body1">{chatMessage}</Typography>
         ))}
+        <Typography key='stream' variant="body1">{streamingResponse}</Typography>
       </div>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter message"
+        <TextField
+          label="Enter message"
           value={message}
           onChange={(event) => setMessage(event.target.value)}
+          variant="outlined"
+          margin="normal"
+          fullWidth
         />
-        <button type="submit">Send</button>
+        <Button type="submit" variant="contained" color="primary">Cha(d)t</Button>
       </form>
-    </div>
+    </Container>
   );
 }
 
