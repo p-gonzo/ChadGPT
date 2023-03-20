@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Checkbox, FormControlLabel, Select, MenuItem } from '@mui/material';
+import socketIOClient from 'socket.io-client';
+
+const ENDPOINT = 'http://localhost:3000';
 
 const ConfigEditor = () => {
   const [config, setConfig] = useState({
@@ -14,6 +17,17 @@ const ConfigEditor = () => {
     debug: false,
     models: []
   });
+
+  useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit('request',  { method: 'installed' });
+    socket.on('result', ({request, response}) => {
+      if (request.method !== 'installed') return;
+      else {
+        setConfig(prevConfig => ({ ...prevConfig, 'models': response.models }));
+      }
+    });
+  }, []);
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -150,9 +164,9 @@ const ConfigEditor = () => {
         size="small"
         style={configStyle}
       >
-        <MenuItem value="model1">Model 1</MenuItem>
-        <MenuItem value="model2">Model 2</MenuItem>
-        <MenuItem value="model3">Model 3</MenuItem>
+        {config.models.map((model) => (
+          <MenuItem key={model} value={model}>{model}</MenuItem>
+        ))}
       </Select>
     </div>
   );

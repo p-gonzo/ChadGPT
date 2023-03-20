@@ -3,19 +3,6 @@ import socketIOClient from 'socket.io-client';
 
 const ENDPOINT = 'http://localhost:3000';
 
-const config = {
-  seed: -1,
-  threads: 4,
-  n_predict: 200,
-  top_k: 40,
-  top_p: 0.9,
-  temp: 0.1,
-  repeat_last_n: 64,
-  repeat_penalty: 1.3,
-  debug: false,
-  models: []
-}
-
 function ChatInterface() {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);

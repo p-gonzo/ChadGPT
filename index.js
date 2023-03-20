@@ -113,43 +113,13 @@ class Dalai {
     console.log("cleaning up temp files")
     await fs.promises.rm(path.resolve(this.home, filename))
   }
-//  async mingw() {
-//    const mingw = "https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev2/x86_64-12.2.0-release-win32-seh-msvcrt-rt_v10-rev2.7z"
-//    const downloader = new Downloader({
-//      url: mingw,
-//      directory: this.home,
-//      onProgress: (percentage, chunk, remainingSize) => {
-//        this.progress("download mingw", percentage)
-//      },
-//    });
-//    try {
-//      await this.startProgress("download mingw")
-//      await downloader.download();
-//    } catch (error) {
-//      console.log(error);
-//    }
-//    this.progressBar.update(1);
-//    await new Promise((resolve, reject) => {
-//      _7z.unpack(path.resolve(this.home, "x86_64-12.2.0-release-win32-seh-msvcrt-rt_v10-rev2.7z"), this.home, (err) => {
-//        if (err) { 
-//          reject(err)
-//        } else {
-//          resolve()
-//        }
-//      })
-//    })
-//    console.log("cleaning up temp files")
-//    await fs.promises.rm(path.resolve(this.home, "x86_64-12.2.0-release-win32-seh-msvcrt-rt_v10-rev2.7z"))
-//  }
+
   async query(req, cb) {
     
     console.log(`> query:`, req)
     if (req.method === "installed") {
       let models = await this.installed()
-      for(let model of models) {
-        cb(model)
-      }
-      cb('\n\n<end>')
+      cb({ models })
       return
     }
 
@@ -219,13 +189,8 @@ class Dalai {
     // first install
     let engine = this.cores[core]
     let e = await exists(path.resolve(engine.home));
-//    if (e) {
-//      // already exists, no need to install
-//    } else {
-      await this.add(core)
-//    }
+    await this.add(core)
 
-    // next add the models
     let res = await this.cores[core].add(...models)
     return res
   }
@@ -439,11 +404,6 @@ class Dalai {
   }
   progress(task, percent) {
     this.progressBar.update(percent/100);
-    //if (percent >= 100) {
-    //  setTimeout(() => {
-    //    term("\n")
-    //  }, 200)
-    //}
   }
   startProgress(title) {
     this.progressBar = term.progressBar({
@@ -454,4 +414,5 @@ class Dalai {
     });
   }
 }
+
 module.exports = Dalai
