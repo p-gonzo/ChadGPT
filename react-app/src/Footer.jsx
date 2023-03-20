@@ -4,11 +4,8 @@ import { Container, Typography } from '@mui/material';
 const footerStyles = {
   footer: {
     backgroundColor: '#f5f5f5',
-    padding: '24px',
+    padding: '0.5em',
     textAlign: 'center',
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
     width: '100%',
   },
   footerTitle: {

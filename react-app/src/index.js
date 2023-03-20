@@ -28,7 +28,9 @@ const App = () => {
       <ConfigEditor config={chatConfig} setConfig={setChatConfig} />
       <br />
       <Divider />
+      <br />
       <ChatInterface config={chatConfig} />
+      <br />
       <Footer />
     </div>
   );
