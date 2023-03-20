@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 import { Container, Typography, TextField, Button } from '@mui/material';
-import { height } from '@mui/system';
 
 const ENDPOINT = 'http://localhost:3000';
 
@@ -24,6 +23,14 @@ const ChatInterface = ( { config } ) => {
     const socket = socketIOClient(ENDPOINT);
     socket.on('result', ({request, response}) => {
       if (response.token) setStreamingResponse(prevStreamingResponse => prevStreamingResponse + response.token);
+      if (response.token === null) {
+        let currentlyStreamedResponse = '';
+        setStreamingResponse(prevStreamingResponse => {
+          currentlyStreamedResponse = prevStreamingResponse;
+          return '';
+        });
+        setChatHistory(prevChatHistory => [...prevChatHistory, currentlyStreamedResponse]);
+      }
     });
   }, []);
 
