@@ -20,10 +20,10 @@ const App = () => {
     repeat_penalty: 1.3,
     debug: false,
     models: [],
-    initialPrompt: '',
-    userName: '',
-    botName: '',
-    useFullHistory: false
+    initialPrompt: `Hi there! I'm your virtual assistant, ChadGPT. I provide informative and helpful responses. What can I do for you?`,
+    userName: '@User',
+    botName: '@ChadGPT',
+    useFullHistory: true
   });
 
   return (

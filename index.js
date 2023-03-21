@@ -173,8 +173,9 @@ class Dalai {
       await this.exec(`${main_bin_path} ${chunks.join(" ")}`, this.cores[Core].home, (msg) => {
         if (endpattern.test(msg)) ended = true
         if (started && !ended) {
-          console.log(msg)
+          msg = msg.replaceAll('\r\n', '\n');
           totalmsgsLength += msg.split('').length;
+          console.log(msg);
           if (totalmsgsLength > promptLength) cb({token: msg })
         } else if (ended && writeEnd) {
           cb({token: null})

@@ -40,13 +40,26 @@ const ChatInterface = ( { config } ) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (message) {
-      const totalMessage = config.userName + ': ' + message;
+      let totalMessage = message;
+      if (config.userName && config.botName) {
+        totalMessage = config.userName + ': ' + message + '\n' + config.botName + ':';
+      }
+      if (chatHistory.length === 0) {
+        totalMessage = config.botName + ': ' + config.initialPrompt + '\n' + totalMessage;
+      } else if (config.useFullHistory) {
+        const labeledHistory = chatHistory.map((chat, idx) => {
+          if (idx % 2 === 0) return config.userName + ': ' + chat;
+          else return config.botName + ': ' + chat;
+        });
+        totalMessage = config.botName + ': ' + config.initialPrompt + '\n' + labeledHistory.join('\n') + '\n' + config.userName + ': ' + message + '\n' + config.botName + ':';
+        console.log(totalMessage);
+      }
       const socket = socketIOClient(ENDPOINT);
       const id = "TS-" + Date.now() + "-" + Math.floor(Math.random() * 100000);
       const model = config.models[0]; // Fix me
       const payload = { ...config, id, model, 'prompt': totalMessage  };
       socket.emit('request', payload );
-      setChatHistory(prevChatHistory => [...prevChatHistory, totalMessage]);
+      setChatHistory(prevChatHistory => [...prevChatHistory, message]);
       setMessage('');
     }
   };
