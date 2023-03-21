@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 import { Container, Typography, TextField, Button } from '@mui/material';
-import { textAlign } from '@mui/system';
 
 const ENDPOINT = 'http://localhost:3000';
 
@@ -23,6 +22,7 @@ const ChatInterface = ( { config } ) => {
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on('result', ({request, response}) => {
+      console.log(request, response);
       if (response.token) {
         setStreamingResponse(prevStreamingResponse => prevStreamingResponse + response.token);
       } 
@@ -40,12 +40,13 @@ const ChatInterface = ( { config } ) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (message) {
+      const totalMessage = config.userName + ': ' + message;
       const socket = socketIOClient(ENDPOINT);
       const id = "TS-" + Date.now() + "-" + Math.floor(Math.random() * 100000);
       const model = config.models[0]; // Fix me
-      const payload = { ...config, id, model, 'prompt': message  };
+      const payload = { ...config, id, model, 'prompt': totalMessage  };
       socket.emit('request', payload );
-      setChatHistory(prevChatHistory => [...prevChatHistory, message]);
+      setChatHistory(prevChatHistory => [...prevChatHistory, totalMessage]);
       setMessage('');
     }
   };
@@ -60,11 +61,11 @@ const ChatInterface = ( { config } ) => {
       <div style={chatHistoryStyle}>
         {chatHistory.map((chatMessage, index) => {
           let chatStyle;
-          if (index % 2 === 0) { chatStyle = { backgroundColor: '#f0f0f0', textAlign: 'right'}; }
-          else { chatStyle = { }; }
+          if (index % 2 === 0) { chatStyle = { backgroundColor: '#f0f0f0', textAlign: 'right', whiteSpace: 'pre-line'}; }
+          else { chatStyle = { whiteSpace: 'pre-line' }; }
           return <Typography key={index} style={chatStyle} variant="body1">{chatMessage}</Typography>
         })}
-        <Typography key='stream' variant="body1">{streamingResponse}</Typography>
+        <Typography style={{whiteSpace: 'pre-line'}} key='stream' variant="body1">{streamingResponse}</Typography>
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSubmit}>

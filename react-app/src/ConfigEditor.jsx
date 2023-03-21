@@ -30,12 +30,18 @@ const ConfigEditor = ( { config, setConfig } ) => {
 
   const configContainerStyle = {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    justifyContent: "space-around"
   };
 
   const configStyle = {
-    width: "25%"
+    width: "10%",
+    minWidth: "100px"
   };
+
+  const initialPromptStyle = {
+    width: "50%"
+  }
 
   return (
     <div style={configContainerStyle}>
@@ -157,6 +163,49 @@ const ConfigEditor = ( { config, setConfig } ) => {
           <MenuItem key={model} value={model}>{model}</MenuItem>
         ))}
       </Select>
+      <TextField
+        label="User Name"
+        type="text"
+        name="userName"
+        value={config.userName}
+        onChange={handleSelectChange}
+        margin="normal"
+        size="small"
+        style={configStyle}
+      />
+      <TextField
+        label="Bot Name"
+        type="text"
+        name="botName"
+        value={config.botName}
+        onChange={handleSelectChange}
+        margin="normal"
+        size="small"
+        style={configStyle}
+      />
+      <TextField
+        label="Initial Bot Prompt"
+        type="text"
+        name="initialPrompt"
+        value={config.initialPrompt}
+        onChange={handleSelectChange}
+        margin="normal"
+        size="small"
+        style={initialPromptStyle}
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={config.useFullHistory}
+            onChange={handleCheckboxChange}
+            name="useFullHistory"
+            color="primary"
+          />
+        }
+        label="Use Full History"
+        size="small"
+        style={configStyle}
+      />
     </div>
   );
 };

@@ -19,7 +19,11 @@ const App = () => {
     repeat_last_n: 64,
     repeat_penalty: 1.3,
     debug: false,
-    models: []
+    models: [],
+    initialPrompt: '',
+    userName: '',
+    botName: '',
+    useFullHistory: false
   });
 
   return (
