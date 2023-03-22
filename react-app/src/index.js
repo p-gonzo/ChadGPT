@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Divider } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 
 import ChatInterface from './ChatInterface'
 import ConfigEditor from './ConfigEditor'
@@ -26,14 +26,19 @@ const App = () => {
     useFullHistory: true
   });
 
+  const [loading, setLoading] = useState({
+    progress: 100,
+    varient: 'determinate'
+  })
+
   return (
     <div>
       <Header />
       <ConfigEditor config={chatConfig} setConfig={setChatConfig} />
       <br />
-      <Divider />
+      <LinearProgress value={loading.progress} variant={loading.varient} />
       <br />
-      <ChatInterface config={chatConfig} />
+      <ChatInterface config={chatConfig} setLoading={setLoading} />
       <br />
       <Footer />
     </div>

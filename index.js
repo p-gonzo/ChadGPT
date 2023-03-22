@@ -176,7 +176,12 @@ class Dalai {
           msg = msg.replaceAll('\r\n', '\n');
           totalmsgsLength += msg.split('').length;
           console.log(msg);
-          if (totalmsgsLength > promptLength) cb({token: msg })
+          if (totalmsgsLength > promptLength) {
+            cb({token: msg })
+          } else {
+            cb({progress: Math.round((totalmsgsLength/promptLength)*100)})
+          }
+
         } else if (ended && writeEnd) {
           cb({token: null})
           writeEnd = false

@@ -9,12 +9,11 @@ const footerStyles = {
     width: '100%',
   },
   footerTitle: {
-    fontWeight: 'bold',
-    fontSize: '24px',
-    marginBottom: '12px',
+    fontSize: '1em',
+    marginBottom: '0.5em',
   },
   copyright: {
-    fontSize: '14px',
+    fontSize: '1em',
     color: '#666',
   },
 };
@@ -25,11 +24,11 @@ function Footer() {
   return (
     <footer style={footerStyles.footer}>
       <Container maxWidth="lg">
-        <Typography variant="h6" style={footerStyles.footerTitle}>
-          ChadGPT
+        <Typography variant="subtitle1" style={footerStyles.footerTitle}>
+        A Cha(d)tBot that leverages <a href='https://crfm.stanford.edu/2023/03/13/alpaca.html'>Stanford's Alpaca</a> Model.
         </Typography>
         <Typography variant="subtitle1" style={footerStyles.copywright}>
-          © {currentYear}
+         ChadGPT © {currentYear}
         </Typography>
       </Container>
     </footer>

@@ -4,7 +4,7 @@ import { Container, Typography, TextField, Button } from '@mui/material';
 
 const ENDPOINT = 'http://localhost:3000';
 
-const ChatInterface = ( { config } ) => {
+const ChatInterface = ( { config, setLoading } ) => {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [streamingResponse, setStreamingResponse] = useState('');
@@ -25,6 +25,7 @@ const ChatInterface = ( { config } ) => {
       console.log(request, response);
       if (response.token) {
         setStreamingResponse(prevStreamingResponse => prevStreamingResponse + response.token);
+        setLoading(prevLoading => ({ ...prevLoading, varient: 'indeterminate'}) );
       } 
       if (response.token === null) {
         let currentlyStreamedResponse = '';
@@ -33,6 +34,10 @@ const ChatInterface = ( { config } ) => {
           return '';
         });
         setChatHistory(prevChatHistory => [...prevChatHistory, currentlyStreamedResponse]);
+        setLoading(prevLoading => ({ ...prevLoading, varient: 'determinate'}) );
+      }
+      if (response.progress !== undefined) {
+        setLoading(prevLoading => ({ ...prevLoading, progress: response.progress}) );
       }
     });
   }, []);
@@ -61,6 +66,7 @@ const ChatInterface = ( { config } ) => {
       socket.emit('request', payload );
       setChatHistory(prevChatHistory => [...prevChatHistory, message]);
       setMessage('');
+      setLoading(prevLoading => ({ ...prevLoading, progress: 0}) );
     }
   };
 
